@@ -1,33 +1,93 @@
 void setup(){
   size(800, 800);
 }
-float[] a = new float[2];
-float[] b = new float[2];
-float[] c = new float[2];
-float[] d = new float[2];
-
+int clear = 255;
 void draw() {
-  background(250);
+  background(clear);
   noLoop();
-  a[0] = 0; 
-  a[1] = 0;
-  b[0] = width;
-  b[1] = 0;
-  c[0] = 0;
-  c[1] = height;
-  d[0] = width;
-  d[1] = height;
   
-  //fill(85, 107, 47);
-  //noStroke();
-  //empty rectangle
-  //triangle(a[0], a[1], b[0], b[1], d[0], d[1]);
-  //triangle(a[0], a[1], b[0], b[1], c[0], c[1]);
-  //triangle(b[0], b[1], c[0], c[1], d[0], d[1]);
-  //triangle(a[0], a[1], c[0], c[1], d[0], d[1]);
-  //rect(a[0], a[1], d[0], d[1]);
-  drawGrid(4,6);
+  int n = 2;
+  //int[] nodes = new int[n * n];
+  int p = 2;
+  
+  //for (int i = 0; i < (n * n); i++){
+  //  nodes[i] = 0;
+  //  print(nodes[i]);
+  //}
+  
+  //loop through all the nodes in k
+  for (int a1 = 0; a1 < p; a1++) {
+    for (int a2 = 0; a2 < p; a2++) { 
+      for (int a3 = 0; a3 < p; a3++) {
+        for (int a4 = 0; a4 < p; a4++) {
+          //loop through all the possibilities for each square in the grid
+          
+          //k is a matrix for one of the n^2 possible patterns
+          int[][] k = { {a1, a2},
+                        {a3, a4} };
+                     
+                        
+          //now we loop through squares and create the current possibility              
+          for (int j = 0; j < n; j++) {
+            //loop through rows slowly...
+            for (int i = 0; i < n; i++) {
+              //and then through columns quickly
+              
+              if (k[i][j] < p) {
+              drawPattern(k[i][j], i, j, n);
+              }
+              else {
+                break;
+              }
+            }
+          }
+          
+          //Finally we save the iteration
+          String pattern = str(a1)+str(a2)+str(a3)+str(a4);
+          save(str(n)+"x"+str(n)+"-"+pattern+".png");
+        }
+      }
+    }
+  }
+  
 }
+
+void drawPattern(int k0, int i0, int j0, int n) {
+  noStroke();
+  // define the four corners of each square in the grid based on the upper left node i,j
+  float ax = (i0 * width)/n;
+  float ay = (j0 * height)/n;
+  float bx = ax;
+  float by = ((j0 + 1) * height)/n;
+  float cx = ((i0 + 1) * width)/n;
+  float cy = ay;
+  float dx = cx;
+  float dy = by;
+  
+  if (k0 == 0) {
+    fill(clear);
+    float side = width/n;
+    rect(ax,ay,side, side);
+  }
+  else if (k0 == 1) {
+    //full rectangle
+    fill(0);
+    float side = width/n;
+    rect(ax,ay,side, side);
+  }
+  else if (k0 == 2) {
+    //upper-left, lower right diagonal, left shaded
+    fill(0);
+  }
+  else {
+    println("no more patterns");
+  }
+  
+
+
+}
+  
+
 
 void drawColumns(float numberOfColumns) {
   float n = numberOfColumns;
